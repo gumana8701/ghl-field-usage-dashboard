@@ -400,7 +400,7 @@ export default function DashboardClient({ fields, sources, lastSync }: Props) {
                         </div>
                       </td>
                       <td style={{ ...td, textAlign: "center" }}>
-                        <button onClick={() => setDeleteTarget(f)} title="Delete field"
+                        <button onClick={() => setDeleteTarget(f)} title="Delete field" aria-label="Delete field"
                           style={{ background: "rgba(239,68,68,0.08)", border: `1px solid rgba(239,68,68,0.3)`, cursor: "pointer", borderRadius: 6, padding: "6px 8px", display: "inline-flex", alignItems: "center", justifyContent: "center", transition: "all 0.15s" }}
                           onMouseEnter={(e) => { const t = e.currentTarget; t.style.borderColor = P.danger; t.style.background = "rgba(239,68,68,0.2)"; }}
                           onMouseLeave={(e) => { const t = e.currentTarget; t.style.borderColor = "rgba(239,68,68,0.3)"; t.style.background = "rgba(239,68,68,0.08)"; }}
