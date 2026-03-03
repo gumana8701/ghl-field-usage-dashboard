@@ -71,8 +71,8 @@ async function main() {
         break;
       }
 
-      await prisma.$transaction(async (tx) => {
-        for (const c of result.contacts) {
+      for (const c of result.contacts) {
+        await prisma.$transaction(async (tx) => {
           await tx.contact.upsert({
             where: { id: c.id },
             create: {
@@ -112,8 +112,8 @@ async function main() {
               update: { value: val },
             });
           }
-        }
-      });
+        }, { timeout: 30000 });
+      }
 
       total += result.contacts.length;
       console.log(`   Page ${page}: +${result.contacts.length} (total: ${total})`);
