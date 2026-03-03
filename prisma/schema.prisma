@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model CustomField {
+  id              String   @id
+  locationId      String
+  name            String
+  fieldKey        String?
+  dataType        String?
+  picklistOptions Json?
+  position        Int?
+  parentId        String?
+  standard        Boolean  @default(false)
+  dateAdded       DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  values          ContactCustomFieldValue[]
+}
+
+model Contact {
+  id           String   @id
+  locationId   String
+  contactName  String?
+  firstName    String?
+  lastName     String?
+  email        String?
+  phone        String?
+  type         String?
+  source       String?
+  assignedTo   String?
+  city         String?
+  state        String?
+  postalCode   String?
+  address1     String?
+  country      String?
+  website      String?
+  timezone     String?
+  dateAdded    DateTime?
+  dateUpdated  DateTime?
+  tags         Json?
+  dnd          Boolean?
+  dndSettings  Json?
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  fieldValues  ContactCustomFieldValue[]
+
+  @@index([source])
+  @@index([locationId])
+}
+
+model ContactCustomFieldValue {
+  contactId   String
+  fieldId     String
+  value       String?
+
+  contact     Contact     @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  field       CustomField @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+
+  @@id([contactId, fieldId])
+  @@index([fieldId])
+  @@index([contactId])
+}
+
+model SyncRun {
+  id            String   @id @default(cuid())
+  startedAt     DateTime @default(now())
+  finishedAt    DateTime?
+  status        String   @default("running")
+  pagesProcessed Int     @default(0)
+  contactsIngested Int   @default(0)
+  fieldsIngested   Int   @default(0)
+  error         String?
+}
